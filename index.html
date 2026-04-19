@@ -20,135 +20,159 @@
             background-color: var(--arsenal-red);
             font-family: 'Poppins', sans-serif;
             color: white;
-            overflow: hidden;
-            height: 100vh;
+            overflow-x: hidden;
+            min-height: 100vh;
             cursor: crosshair;
         }
 
-        /* Feature 1: The "Lead" Counter */
+        /* Live Counter */
         .live-counter {
             position: fixed;
-            top: 20px;
-            left: 20px;
+            top: 15px;
+            left: 15px;
             font-family: 'Space Mono', monospace;
             background: rgba(0,0,0,0.8);
-            padding: 10px 20px;
+            padding: 8px 15px;
             border-left: 4px solid var(--gold);
             z-index: 100;
+            font-size: 0.8rem;
         }
 
         .hero {
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
+            flex-direction: row; /* Desktop Default */
             align-items: center;
             justify-content: space-between;
             position: relative;
-            padding: 0 10%;
+            padding: 80px 10%;
+            gap: 40px;
         }
 
-        /* Feature 2: Kinetic Background Text */
+        /* Responsive Background Text */
         .bg-text {
             position: absolute;
             left: 50%;
             top: 50%;
             transform: translate(-50%, -50%);
             font-family: 'Montserrat', sans-serif;
-            font-size: 22vw;
+            font-size: 20vw;
             font-weight: 900;
-            color: rgba(0, 0, 0, 0.1);
+            color: rgba(0, 0, 0, 0.08);
             z-index: 1;
             user-select: none;
             white-space: nowrap;
+            pointer-events: none;
         }
 
-        /* Feature 3: Glitching Image Container */
         .can-container {
             position: relative;
             z-index: 5;
-            width: clamp(280px, 35vw, 500px);
+            flex: 1;
+            display: flex;
+            justify-content: center;
             filter: drop-shadow(0 0 30px rgba(0,0,0,0.5));
-            transition: filter 0.3s;
-        }
-
-        .can-container:hover {
-            filter: drop-shadow(0 0 50px var(--glitch-color));
         }
 
         .can-container img {
             width: 100%;
+            max-width: 450px;
+            height: auto;
             display: block;
-            pointer-events: auto;
         }
 
         .content {
             position: relative;
             z-index: 10;
+            flex: 1;
             max-width: 550px;
         }
 
         .content h1 {
             font-family: 'Montserrat', sans-serif;
-            font-size: clamp(2.5rem, 6vw, 4.5rem);
-            line-height: 0.9;
-            margin-bottom: 25px;
+            font-size: clamp(2.2rem, 5vw, 4.2rem);
+            line-height: 0.95;
+            margin-bottom: 20px;
             text-transform: uppercase;
-            text-shadow: 5px 5px 0px rgba(0,0,0,0.2);
         }
 
         .stats-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 30px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 25px;
             font-family: 'Space Mono', monospace;
-            font-size: 0.8rem;
+            font-size: clamp(0.7rem, 2vw, 0.85rem);
         }
 
         .stat-box {
             background: rgba(255,255,255,0.1);
-            padding: 10px;
+            padding: 12px;
             border: 1px solid rgba(255,255,255,0.2);
+            backdrop-filter: blur(5px);
         }
 
-        .btn-group { display: flex; gap: 20px; }
+        .content p {
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .btn-group { 
+            display: flex; 
+            flex-wrap: wrap; 
+            gap: 15px; 
+        }
 
         .btn {
-            display: inline-block;
+            flex: 1;
+            min-width: 200px;
+            text-align: center;
             background: var(--white);
             color: var(--arsenal-red);
-            padding: 18px 40px;
+            padding: 15px 25px;
             text-decoration: none;
             font-weight: 700;
             border-radius: 4px;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
+            letter-spacing: 1px;
+            transition: 0.3s;
+            font-size: 0.9rem;
         }
 
-        .btn-danger { background: var(--dark); color: white; border: 2px solid var(--white); }
+        .btn-danger { 
+            background: #000; 
+            color: white; 
+            border: 1px solid var(--white); 
+        }
 
-        /* Feature 4: Falling Tears/Rain */
         .tear {
             position: absolute;
-            width: 2px;
-            height: 15px;
-            background: rgba(255,255,255,0.4);
+            width: 1px;
+            height: 20px;
+            background: rgba(255,255,255,0.3);
             pointer-events: none;
             z-index: 2;
         }
 
-        @media (max-width: 1024px) {
-            .hero { flex-direction: column; text-align: center; }
-            .can-container { width: 220px; }
+        /* RESPONSIVE BREAKPOINT */
+        @media (max-width: 900px) {
+            .hero {
+                flex-direction: column-reverse; /* Content on top of image for mobile */
+                text-align: center;
+                padding-top: 100px;
+            }
+            .content h1 { margin-top: 20px; }
+            .btn-group { justify-content: center; }
+            .can-container img { max-width: 280px; }
+            .bg-text { font-size: 30vw; }
         }
     </style>
 </head>
 <body>
 
     <div class="live-counter">
-        POINTS DROPPED: <span id="pts">00</span>
+        TEARS SHED: <span id="pts">00</span>L
     </div>
 
     <div class="hero">
@@ -159,74 +183,76 @@
             
             <div class="stats-grid">
                 <div class="stat-box">EXPECTATION: Treble</div>
-                <div class="stat-box">REALITY: DVD Release</div>
+                <div class="stat-box">REALITY: Vibes</div>
                 <div class="stat-box">LEAD: 8 Points</div>
-                <div class="stat-box">STATUS: Bottling...</div>
+                <div class="stat-box">STATUS: Choking...</div>
             </div>
 
-            <p>From invincibility to "it's just a hobby." We don't just lose the league; we craft a masterpiece of disappointment. $55.66 monthly to watch the dream die from the front row.</p>
+            <p>We don't just lose the league; we craft a masterpiece of disappointment. Grab your bottle covers and prepare for the annual May meltdown.</p>
             
             <div class="btn-group">
-                <a href="#" class="btn" onmouseover="glitchText(this)" onmouseout="resetText(this)">Join The Panic</a>
-                <a href="#" class="btn btn-danger">Delete History</a>
+                <a href="#" class="btn" onmouseover="glitch(this)" onmouseout="stopGlitch(this)">Pre-order Tissues</a>
+                <a href="#" class="btn btn-danger">Delete 2024 Memory</a>
             </div>
         </div>
 
         <div class="can-container" id="can">
-            <img src="Ozil-Arsenal-PNG-Photos.png" alt="Disappointment" id="can-img">
+            <img src="Ozil-Arsenal-PNG-Photos.png" alt="Arsenal" id="can-img">
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 
     <script>
-        // Feature 5: Glitch Effect on Hover
-        function glitchText(el) {
-            gsap.to(el, { duration: 0.1, x: "random(-5, 5)", y: "random(-5, 5)", repeat: 5, yoyo: true });
+        // Handle image error
+        window.onload = () => {
+            const img = document.querySelector('#can-img');
+            img.onerror = () => {
+                img.src = 'https://purepng.com/public/uploads/large/purepng.com-pepsi-canpepsidrinkscolasoda-1411527233291pujit.png'; 
+            };
+        };
+
+        // Glitch Logic
+        function glitch(el) {
+            gsap.to(el, { duration: 0.1, x: "random(-4, 4)", y: "random(-4, 4)", repeat: -1, yoyo: true });
         }
-        function resetText(el) {
+        function stopGlitch(el) {
+            gsap.killTweensOf(el);
             gsap.to(el, { x: 0, y: 0, duration: 0.2 });
         }
 
-        // Live Counter Animation
+        // Counter
         let count = 0;
         setInterval(() => {
-            count += Math.floor(Math.random() * 3);
+            count += 5;
             document.getElementById('pts').innerText = count.toString().padStart(2, '0');
-        }, 3000);
+        }, 2000);
 
         const tl = gsap.timeline();
 
-        // Reveal
-        tl.from(".hero", { opacity: 0, duration: 1 })
-          .from("#text-anim > *", { y: 100, opacity: 0, stagger: 0.2, ease: "expo.out" })
-          .from("#can", { scale: 0, rotation: 180, duration: 1.5, ease: "back.out(1.7)" }, "-=1");
+        // Entry
+        tl.from(".content > *", { y: 50, opacity: 0, stagger: 0.15, ease: "power4.out", duration: 1 })
+          .from("#can", { scale: 0.5, opacity: 0, duration: 1, ease: "back.out(1.7)" }, "-=0.5");
 
-        // Feature 6: Violent Shake on Mouse Over
+        // Violent Hover Shake
         const can = document.querySelector("#can");
         can.addEventListener("mouseenter", () => {
-            gsap.to(can, { 
-                x: "random(-10, 10)", 
-                y: "random(-10, 10)", 
-                rotation: "random(-5, 5)",
-                repeat: -1, 
-                duration: 0.05, 
-                yoyo: true 
-            });
-            gsap.to("body", { backgroundColor: "#800000", duration: 0.2 });
+            gsap.to(can, { x: "random(-8, 8)", y: "random(-8, 8)", repeat: -1, duration: 0.05, yoyo: true });
+            gsap.to("body", { backgroundColor: "#800000", duration: 0.3 });
         });
 
         can.addEventListener("mouseleave", () => {
             gsap.killTweensOf(can);
-            gsap.to(can, { x: 0, y: 0, rotation: 0, duration: 0.5 });
+            gsap.to(can, { x: 0, y: 0, duration: 0.5 });
             gsap.to("body", { backgroundColor: "#DB0007", duration: 0.5 });
         });
 
         // Parallax
         document.addEventListener("mousemove", (e) => {
-            const x = (e.clientX - window.innerWidth / 2) / 30;
-            const y = (e.clientY - window.innerHeight / 2) / 30;
+            const x = (e.clientX - window.innerWidth / 2) / 50;
+            const y = (e.clientY - window.innerHeight / 2) / 50;
             gsap.to("#bg-move", { x: -x * 2, y: -y * 2, duration: 1 });
+            gsap.to("#can", { rotationY: x * 2, rotationX: -y * 2, duration: 1 });
         });
 
         // Falling Tears
@@ -238,13 +264,13 @@
             document.body.appendChild(tear);
 
             gsap.to(tear, {
-                y: window.innerHeight + 100,
+                y: window.innerHeight + 50,
                 duration: Math.random() * 1 + 0.5,
                 ease: "none",
                 onComplete: () => tear.remove()
             });
         }
-        setInterval(createTear, 100);
+        setInterval(createTear, 150);
     </script>
 </body>
 </html>
