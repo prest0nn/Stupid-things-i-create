@@ -3,10 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For My Bestie</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
+    <title>Official Resignation - Udeze Preston</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
     
     <style>
+        :root {
+            --arsenal-red: #DB0007;
+            --gold: #9C824A;
+            --paper: #f4f1ea;
+            --ink: #1a1a1a;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -14,7 +21,7 @@
         }
 
         body {
-            background-color: #0f172a; /* Dark sleek background */
+            background-color: #0d0d0d;
             height: 100vh;
             display: flex;
             justify-content: center;
@@ -23,128 +30,171 @@
             font-family: 'Poppins', sans-serif;
         }
 
-        .container {
-            text-align: center;
-            position: relative;
+        /* The Button */
+        #reveal-btn {
+            background: var(--arsenal-red);
+            color: white;
+            border: 2px solid var(--gold);
+            padding: 20px 40px;
+            font-size: 1.2rem;
+            font-family: 'Cinzel', serif;
+            letter-spacing: 2px;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(219, 0, 7, 0.4);
+            z-index: 100;
         }
 
-        #open-btn {
-            background: linear-gradient(135deg, #ff4757, #ff6b81);
-            color: white;
-            border: none;
-            padding: 20px 40px;
+        /* The Letter Container */
+        .letter-wrap {
+            position: absolute;
+            width: 90%;
+            max-width: 600px;
+            background-color: var(--paper);
+            padding: 60px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+            display: none; /* Hidden until GSAP starts */
+            border-top: 10px solid var(--arsenal-red);
+        }
+
+        .header {
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            font-family: 'Cinzel', serif;
+        }
+
+        .recipient {
+            font-weight: bold;
+            color: var(--arsenal-red);
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .content {
+            font-family: 'Playfair Display', serif;
+            line-height: 1.6;
+            font-size: 1.25rem;
+            color: var(--ink);
+        }
+
+        .content p {
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+
+        .signature-area {
+            margin-top: 40px;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+        }
+
+        .name {
+            display: block;
             font-size: 1.5rem;
             font-weight: bold;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 10px 20px rgba(255, 71, 87, 0.3);
-            transition: transform 0.2s;
-            z-index: 10;
+            margin-top: 10px;
+            color: var(--ink);
+            font-family: 'Cinzel', serif;
         }
 
-        #open-btn:hover {
-            transform: scale(1.05);
-        }
-
-        .message-container {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 100vw;
-            pointer-events: none;
-        }
-
-        .message {
-            font-size: 4rem;
-            color: #f8fafc;
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        /* Essential for GSAP animation */
-        .letter {
+        /* Letter class for GSAP explosion */
+        .char {
             display: inline-block;
             opacity: 0;
-            will-change: transform;
         }
 
-        .highlight {
-            color: #ff4757;
+        .watermark {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 0.8rem;
+            opacity: 0.2;
+            color: var(--gold);
+            font-family: 'Cinzel', serif;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <button id="open-btn">Click for a Surprise 🎁</button>
+    <button id="reveal-btn">Open Official Notice</button>
+
+    <div class="letter-wrap" id="letter">
+        <div class="header">Notice of Resignation</div>
         
-        <div class="message-container">
-            <h1 class="message" id="target-text">You are my Favorite Person!</h1>
+        <span class="recipient">To: Mikel Arteta, Arsenal FC</span>
+
+        <div class="content">
+            <p id="main-message">
+                I am writing to formally inform you that I am no longer an Arsenal fan. 
+                The process has reached its conclusion.
+            </p>
         </div>
+
+        <div class="signature-area">
+            Sincerely,<br>
+            <span class="name" id="sig-name">Udeze Preston</span>
+        </div>
+
+        <div class="watermark">Final Decision 2026</div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 
     <script>
-        const textElement = document.querySelector('#target-text');
-        const btn = document.querySelector('#open-btn');
+        const btn = document.querySelector('#reveal-btn');
+        const letter = document.querySelector('#letter');
+        const message = document.querySelector('#main-message');
+        const sigName = document.querySelector('#sig-name');
 
-        // 1. Break the text into individual letters so GSAP can grab them
-        const words = textElement.textContent.split(" ");
-        textElement.innerHTML = ""; // Clear original text
+        // Helper to split text into chars
+        function splitToChars(element) {
+            const text = element.textContent.trim();
+            element.innerHTML = text.split("").map(char => 
+                `<span class="char">${char === " " ? "&nbsp;" : char}</span>`
+            ).join("");
+        }
 
-        words.forEach(word => {
-            const wordSpan = document.createElement("span");
-            wordSpan.style.whiteSpace = "nowrap"; // Keep words together
-            
-            word.split("").forEach(char => {
-                const letterSpan = document.createElement("span");
-                letterSpan.className = "letter";
-                letterSpan.innerHTML = char;
-                wordSpan.appendChild(letterSpan);
-            });
-            
-            textElement.appendChild(wordSpan);
-            // Add space between words
-            textElement.innerHTML += "&nbsp;";
-        });
+        splitToChars(message);
+        splitToChars(sigName);
 
-        // 2. The Animation Logic
         btn.addEventListener('click', () => {
-            // Animate button away
-            gsap.to(btn, { 
-                scale: 0, 
-                opacity: 0, 
-                duration: 0.5, 
-                ease: "back.in(1.7)" 
-            });
+            // 1. Vanish the button
+            gsap.to(btn, { scale: 0, opacity: 0, duration: 0.4 });
 
-            // The Exploding Letter Effect
-            gsap.fromTo(".letter", 
+            // 2. Prepare the letter
+            gsap.set(letter, { display: 'block', scale: 0.8, opacity: 0 });
+
+            // 3. Animate the letter paper appearing
+            const tl = gsap.timeline();
+
+            tl.to(letter, {
+                scale: 1,
+                opacity: 1,
+                duration: 1,
+                ease: "power4.out"
+            })
+            // 4. Explode the text from random positions into place
+            .fromTo(".char", 
                 {
                     opacity: 0,
-                    scale: 0,
-                    // Random start positions (The "Explosion" origin)
-                    x: () => (Math.random() - 0.5) * window.innerWidth * 1.5,
-                    y: () => (Math.random() - 0.5) * window.innerHeight * 1.5,
-                    rotation: () => Math.random() * 720 - 360,
+                    x: () => (Math.random() - 0.5) * 600,
+                    y: () => (Math.random() - 0.5) * 600,
+                    rotation: () => Math.random() * 360,
+                    scale: 2
                 },
                 {
                     opacity: 1,
-                    scale: 1,
                     x: 0,
                     y: 0,
                     rotation: 0,
-                    duration: 2,
-                    stagger: {
-                        amount: 0.8, // Total time spread across all letters
-                        from: "random" // Makes the order of appearance feel organic
-                    },
-                    ease: "elastic.out(1, 0.75)" // Gives that bouncy "jello" finish
-                }
+                    scale: 1,
+                    duration: 1.5,
+                    stagger: 0.01,
+                    ease: "back.out(1.5)"
+                }, 
+                "-=0.5" // Start slightly before the letter finishes moving
             );
         });
     </script>
