@@ -3,199 +3,241 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Official Resignation - Udeze Preston</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
+    <title>The Official Departure | Udeze Preston</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=EB+Garamond:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;600&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --arsenal-red: #DB0007;
-            --gold: #9C824A;
-            --paper: #f4f1ea;
-            --ink: #1a1a1a;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+            --arsenal-red: #cc0000;
+            --gold-leaf: #d4af37;
+            --paper-white: #fdfdfb;
+            --deep-space: #0a0a0b;
         }
 
         body {
-            background-color: #0d0d0d;
+            background-color: var(--deep-space);
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             overflow: hidden;
-            font-family: 'Poppins', sans-serif;
+            perspective: 1500px; /* For 3D effects */
+            font-family: 'Inter', sans-serif;
         }
 
-        /* The Button */
-        #reveal-btn {
-            background: var(--arsenal-red);
-            color: white;
-            border: 2px solid var(--gold);
-            padding: 20px 40px;
-            font-size: 1.2rem;
-            font-family: 'Cinzel', serif;
-            letter-spacing: 2px;
+        /* Initial Trigger Button */
+        #trigger-btn {
+            background: none;
+            border: 1px solid var(--gold-leaf);
+            color: var(--gold-leaf);
+            padding: 20px 50px;
+            font-family: 'Cinzel Decorative', serif;
+            font-size: 1.1rem;
+            letter-spacing: 5px;
             cursor: pointer;
-            box-shadow: 0 0 20px rgba(219, 0, 7, 0.4);
-            z-index: 100;
+            transition: all 0.4s;
+            position: relative;
         }
 
-        /* The Letter Container */
-        .letter-wrap {
+        #trigger-btn:hover {
+            background: var(--gold-leaf);
+            color: var(--deep-space);
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.4);
+        }
+
+        /* The Letter Canvas */
+        .letter-container {
+            width: 550px;
+            background: var(--paper-white);
+            padding: 80px;
+            position: relative;
+            display: none;
+            box-shadow: 0 50px 100px rgba(0,0,0,0.8);
+            border: 1px solid rgba(255,255,255,0.1);
+            transform-style: preserve-3d;
+        }
+
+        /* Red "Arsenal" border that will animate */
+        .accent-bar {
             position: absolute;
-            width: 90%;
-            max-width: 600px;
-            background-color: var(--paper);
-            padding: 60px;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
-            display: none; /* Hidden until GSAP starts */
-            border-top: 10px solid var(--arsenal-red);
+            top: 0; left: 0; right: 0;
+            height: 8px;
+            background: var(--arsenal-red);
         }
 
-        .header {
-            border-bottom: 1px solid #ddd;
+        .header-section {
+            text-align: center;
+            margin-bottom: 50px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+
+        .header-section h2 {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: 0.9rem;
+            color: #888;
+            letter-spacing: 3px;
+        }
+
+        .to-field {
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.75rem;
             margin-bottom: 30px;
-            padding-bottom: 10px;
-            font-family: 'Cinzel', serif;
-        }
-
-        .recipient {
-            font-weight: bold;
-            color: var(--arsenal-red);
-            margin-bottom: 20px;
             display: block;
+            color: var(--arsenal-red);
         }
 
-        .content {
-            font-family: 'Playfair Display', serif;
-            line-height: 1.6;
-            font-size: 1.25rem;
-            color: var(--ink);
+        .main-body {
+            font-family: 'EB Garamond', serif;
+            font-size: 1.4rem;
+            line-height: 1.5;
+            color: #222;
         }
 
-        .content p {
-            margin-bottom: 20px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 4px;
+        .char {
+            display: inline-block;
+            will-change: transform, opacity;
         }
 
-        .signature-area {
-            margin-top: 40px;
-            font-family: 'Playfair Display', serif;
+        .signature-box {
+            margin-top: 60px;
+            font-family: 'EB Garamond', serif;
             font-style: italic;
         }
 
-        .name {
+        .signature-name {
             display: block;
-            font-size: 1.5rem;
-            font-weight: bold;
+            font-family: 'Cinzel Decorative', serif;
+            font-style: normal;
+            font-size: 1.4rem;
             margin-top: 10px;
-            color: var(--ink);
-            font-family: 'Cinzel', serif;
+            color: var(--deep-space);
+            border-bottom: 2px solid var(--gold-leaf);
+            width: fit-content;
         }
 
-        /* Letter class for GSAP explosion */
-        .char {
-            display: inline-block;
-            opacity: 0;
-        }
-
-        .watermark {
+        /* Wax Seal Mockup */
+        .wax-seal {
             position: absolute;
-            bottom: 20px;
-            right: 20px;
-            font-size: 0.8rem;
-            opacity: 0.2;
-            color: var(--gold);
-            font-family: 'Cinzel', serif;
+            bottom: 40px;
+            right: 40px;
+            width: 70px;
+            height: 70px;
+            background: #8b0000;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold-leaf);
+            font-family: 'Cinzel Decorative';
+            font-size: 1.5rem;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.5), 2px 5px 10px rgba(0,0,0,0.3);
+            opacity: 0;
         }
     </style>
 </head>
 <body>
 
-    <button id="reveal-btn">Open Official Notice</button>
+    <button id="trigger-btn">SUBMIT RESIGNATION</button>
 
-    <div class="letter-wrap" id="letter">
-        <div class="header">Notice of Resignation</div>
+    <div class="letter-container" id="letter">
+        <div class="accent-bar"></div>
         
-        <span class="recipient">To: Mikel Arteta, Arsenal FC</span>
-
-        <div class="content">
-            <p id="main-message">
-                I am writing to formally inform you that I am no longer an Arsenal fan. 
-                The process has reached its conclusion.
-            </p>
+        <div class="header-section">
+            <h2>Formal Fan Resignation</h2>
         </div>
 
-        <div class="signature-area">
-            Sincerely,<br>
-            <span class="name" id="sig-name">Udeze Preston</span>
+        <span class="to-field">Attn: Mikel Arteta | London Colney</span>
+
+        <div class="main-body" id="text-target">
+            Effective immediately, the North London era has reached its final whistle. 
+            I, Udeze Preston, am officially stepping down from my post as an Arsenal fan. 
+            The process has been trusted, but the journey ends here.
         </div>
 
-        <div class="watermark">Final Decision 2026</div>
+        <div class="signature-box">
+            With no further regards,<br>
+            <span class="signature-name" id="name-target">Udeze Preston</span>
+        </div>
+
+        <div class="wax-seal">UP</div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 
     <script>
-        const btn = document.querySelector('#reveal-btn');
+        const btn = document.querySelector('#trigger-btn');
         const letter = document.querySelector('#letter');
-        const message = document.querySelector('#main-message');
-        const sigName = document.querySelector('#sig-name');
+        const textTarget = document.querySelector('#text-target');
+        const nameTarget = document.querySelector('#name-target');
 
-        // Helper to split text into chars
-        function splitToChars(element) {
-            const text = element.textContent.trim();
-            element.innerHTML = text.split("").map(char => 
-                `<span class="char">${char === " " ? "&nbsp;" : char}</span>`
+        // Professional splitting function
+        function splitText(el) {
+            const content = el.innerText;
+            el.innerHTML = content.split("").map(c => 
+                `<span class="char">${c === " " ? "&nbsp;" : c}</span>`
             ).join("");
         }
 
-        splitToChars(message);
-        splitToChars(sigName);
+        splitText(textTarget);
+        splitText(nameTarget);
 
         btn.addEventListener('click', () => {
-            // 1. Vanish the button
-            gsap.to(btn, { scale: 0, opacity: 0, duration: 0.4 });
+            // 1. Clear the screen
+            gsap.to(btn, { y: -50, opacity: 0, duration: 0.6, ease: "back.in(2)" });
 
-            // 2. Prepare the letter
-            gsap.set(letter, { display: 'block', scale: 0.8, opacity: 0 });
+            // 2. Setup Letter
+            gsap.set(letter, { display: 'block', rotationX: -15, y: 100, opacity: 0 });
 
-            // 3. Animate the letter paper appearing
             const tl = gsap.timeline();
 
             tl.to(letter, {
-                scale: 1,
                 opacity: 1,
-                duration: 1,
+                y: 0,
+                rotationX: 0,
+                duration: 1.2,
                 ease: "power4.out"
             })
-            // 4. Explode the text from random positions into place
             .fromTo(".char", 
-                {
-                    opacity: 0,
-                    x: () => (Math.random() - 0.5) * 600,
-                    y: () => (Math.random() - 0.5) * 600,
-                    rotation: () => Math.random() * 360,
-                    scale: 2
+                { 
+                    opacity: 0, 
+                    y: 50, 
+                    rotationY: 90, 
+                    filter: "blur(10px)" 
                 },
-                {
-                    opacity: 1,
-                    x: 0,
-                    y: 0,
-                    rotation: 0,
-                    scale: 1,
-                    duration: 1.5,
+                { 
+                    opacity: 1, 
+                    y: 0, 
+                    rotationY: 0, 
+                    filter: "blur(0px)",
+                    duration: 0.8, 
                     stagger: 0.01,
-                    ease: "back.out(1.5)"
-                }, 
-                "-=0.5" // Start slightly before the letter finishes moving
-            );
+                    ease: "power2.out"
+                }, "-=0.4")
+            .to(".wax-seal", {
+                scale: 1.5,
+                opacity: 1,
+                duration: 0.6,
+                ease: "bounce.out"
+            })
+            .to(".wax-seal", {
+                scale: 1,
+                duration: 0.2
+            });
+
+            // 3. Add 3D Mouse Tracking (The "Better" Factor)
+            document.addEventListener('mousemove', (e) => {
+                const x = (window.innerWidth / 2 - e.pageX) / 25;
+                const y = (window.innerHeight / 2 - e.pageY) / 25;
+                gsap.to(letter, {
+                    rotationY: x,
+                    rotationX: -y,
+                    duration: 0.8,
+                    ease: "power1.out"
+                });
+            });
         });
     </script>
 </body>
