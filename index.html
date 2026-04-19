@@ -3,117 +3,206 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Reveal | Interactive Concept</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&display=swap" rel="stylesheet">
+    <title>Pepsi | Thirsty For More</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Poppins:wght@300;600&display=swap" rel="stylesheet">
     
     <style>
+        :root {
+            --pepsi-blue: #005cb4;
+            --pepsi-red: #ef3340;
+            --white: #ffffff;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            background-color: #050505;
-            height: 100vh;
-            width: 100vw;
-            overflow: hidden;
-            font-family: 'Inter', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        /* The hidden layer (only visible via flashlight) */
-        .reveal-layer {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, #ff0055, #7000ff);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            /* The Mask - The circle follows the mouse */
-            mask-image: radial-gradient(circle 150px at var(--x) var(--y), black 100%, transparent 100%);
-            -webkit-mask-image: radial-gradient(circle 150px at var(--x) var(--y), black 0%, transparent 100%);
-        }
-
-        .content {
+            background-color: var(--pepsi-blue);
+            font-family: 'Poppins', sans-serif;
             color: white;
-            font-size: clamp(3rem, 15vw, 10rem);
-            line-height: 0.9;
-            text-transform: uppercase;
-            user-select: none;
+            overflow: hidden;
+            height: 100vh;
         }
 
-        /* The static dark layer text */
-        .base-layer {
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 0 10%;
+        }
+
+        /* Large Background Text */
+        .bg-text {
             position: absolute;
-            color: #111;
-            font-size: clamp(3rem, 15vw, 10rem);
-            line-height: 0.9;
-            text-transform: uppercase;
-            text-align: center;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 25vw;
+            font-weight: 900;
+            color: rgba(255, 255, 255, 0.05);
             z-index: 1;
+            user-select: none;
+            white-space: nowrap;
         }
 
-        .instruction {
-            position: fixed;
-            bottom: 40px;
-            color: #444;
-            letter-spacing: 2px;
-            font-size: 0.7rem;
+        /* The Can */
+        .can-container {
+            position: relative;
+            z-index: 5;
+            width: 300px;
+            filter: drop-shadow(0 20px 50px rgba(0,0,0,0.5));
+        }
+
+        .can-container img {
+            width: 100%;
+            display: block;
+        }
+
+        /* Floating Bubbles */
+        .bubble {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        /* Content Text */
+        .content {
+            position: absolute;
+            left: 10%;
+            z-index: 10;
+            max-width: 400px;
+        }
+
+        .content h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 4rem;
+            line-height: 1;
+            margin-bottom: 20px;
             text-transform: uppercase;
+        }
+
+        .content p {
+            font-size: 1rem;
+            opacity: 0.8;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            display: inline-block;
+            background: var(--white);
+            color: var(--pepsi-blue);
+            padding: 15px 35px;
+            text-decoration: none;
+            font-weight: 700;
+            border-radius: 50px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background: var(--pepsi-red);
+            color: white;
+            transform: translateY(-5px);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero { flex-direction: column; text-align: center; }
+            .content { position: relative; left: 0; margin-bottom: 50px; }
+            .can-container { width: 200px; }
+            .content h1 { font-size: 2.5rem; }
         }
     </style>
 </head>
 <body>
 
-    <div class="base-layer">
-        Move<br>To<br>Find
-    </div>
+    <div class="hero">
+        <div class="bg-text" id="bg-move">PEPSI</div>
 
-    <div class="reveal-layer" id="reveal">
-        <div class="content">
-            Hidden<br>In<br>Dark
+        <div class="content" id="text-anim">
+            <h1>Thirsty For More</h1>
+            <p>Experience the bold, refreshing taste of the classic Pepsi-Cola. Grab a can and live the moment.</p>
+            <a href="#" class="btn">Shop Now</a>
+        </div>
+
+        <div class="can-container" id="can">
+            <img src="https://purepng.com/public/uploads/large/purepng.com-pepsi-canpepsidrinkscolasoda-1411527233291pujit.png" alt="Pepsi Can">
         </div>
     </div>
-
-    <div class="instruction">Move your cursor to explore</div>
 
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 
     <script>
-        const reveal = document.querySelector('#reveal');
+        // 1. Initial Animation on Load
+        const tl = gsap.timeline();
 
-        // Initial Position
-        gsap.set(reveal, { "--x": "50%", "--y": "50%" });
+        tl.from(".can-container", {
+            y: 500,
+            rotation: 45,
+            duration: 1.5,
+            ease: "expo.out"
+        })
+        .from("#text-anim h1, #text-anim p, #text-anim .btn", {
+            x: -100,
+            opacity: 0,
+            stagger: 0.2,
+            duration: 1,
+            ease: "power3.out"
+        }, "-=1");
 
-        window.addEventListener('mousemove', (e) => {
-            // Using GSAP quickSetter for high-performance mouse tracking
-            const xPercent = (e.clientX / window.innerWidth) * 100;
-            const yPercent = (e.clientY / window.innerHeight) * 100;
+        // 2. Floating Can Idle Animation
+        gsap.to("#can", {
+            y: "-=30",
+            rotation: "+=5",
+            duration: 3,
+            repeat: -1,
+            yoyo: true,
+            ease: "sine.inOut"
+        });
 
-            gsap.to(reveal, {
-                "--x": `${xPercent}%`,
-                "--y": `${yPercent}%`,
-                duration: 0.5,
-                ease: "power2.out"
+        // 3. Mouse Move Parallax
+        document.addEventListener("mousemove", (e) => {
+            const x = (window.innerWidth / 2 - e.pageX) / 50;
+            const y = (window.innerHeight / 2 - e.pageY) / 50;
+
+            // Move the Background Text (Slower)
+            gsap.to("#bg-move", {
+                x: x * 2,
+                y: y * 2,
+                duration: 1
+            });
+
+            // Tilt the Can (Faster)
+            gsap.to("#can", {
+                rotationY: x * 2,
+                rotationX: -y * 2,
+                duration: 1
             });
         });
 
-        // Add a "pulse" effect on click
-        window.addEventListener('mousedown', () => {
-            gsap.to(reveal, {
-                maskImage: "radial-gradient(circle 300px at var(--x) var(--y), black 0%, transparent 100%)",
-                "-webkit-mask-image": "radial-gradient(circle 300px at var(--x) var(--y), black 0%, transparent 100%)",
-                duration: 0.3
-            });
-        });
+        // 4. Create Random Bubbles
+        for (let i = 0; i < 20; i++) {
+            const bubble = document.createElement('div');
+            bubble.className = 'bubble';
+            const size = Math.random() * 40 + 10;
+            bubble.style.width = `${size}px`;
+            bubble.style.height = `${size}px`;
+            bubble.style.left = `${Math.random() * 100}%`;
+            bubble.style.top = `${Math.random() * 100}%`;
+            document.body.appendChild(bubble);
 
-        window.addEventListener('mouseup', () => {
-            gsap.to(reveal, {
-                maskImage: "radial-gradient(circle 150px at var(--x) var(--y), black 0%, transparent 100%)",
-                "-webkit-mask-image": "radial-gradient(circle 150px at var(--x) var(--y), black 0%, transparent 100%)",
-                duration: 0.3
+            gsap.to(bubble, {
+                y: "-=100",
+                opacity: 0,
+                duration: Math.random() * 3 + 2,
+                repeat: -1,
+                ease: "none",
+                delay: Math.random() * 5
             });
-        });
+        }
     </script>
 </body>
 </html>
