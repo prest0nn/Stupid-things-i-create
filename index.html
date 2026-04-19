@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arsenal | The Official Bottling Plant</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Poppins:wght@300;600&family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
+    <title>Arsenal | The Global Bottling Standard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Poppins:wght@300;600&family=Space+Mono&display=swap" rel="stylesheet">
     
     <style>
         :root {
             --arsenal-red: #DB0007;
             --gold: #9C824A;
             --white: #ffffff;
-            --dark: #0d0d0d;
+            --glitch-color: #00f2ff;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -22,32 +22,19 @@
             color: white;
             overflow: hidden;
             height: 100vh;
+            cursor: crosshair;
         }
 
-        /* Top Navigation Button */
-        .nav-link {
+        /* Feature 1: The "Lead" Counter */
+        .live-counter {
             position: fixed;
-            top: 30px;
-            right: 50px;
+            top: 20px;
+            left: 20px;
+            font-family: 'Space Mono', monospace;
+            background: rgba(0,0,0,0.8);
+            padding: 10px 20px;
+            border-left: 4px solid var(--gold);
             z-index: 100;
-        }
-
-        .btn-outline {
-            padding: 10px 25px;
-            border: 1px solid rgba(255,255,255,0.4);
-            color: white;
-            text-decoration: none;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            transition: 0.3s;
-            backdrop-filter: blur(5px);
-        }
-
-        .btn-outline:hover {
-            background: white;
-            color: var(--arsenal-red);
         }
 
         .hero {
@@ -59,46 +46,40 @@
             padding: 0 10%;
         }
 
+        /* Feature 2: Kinetic Background Text */
         .bg-text {
             position: absolute;
             left: 50%;
             top: 50%;
             transform: translate(-50%, -50%);
             font-family: 'Montserrat', sans-serif;
-            font-size: 20vw;
+            font-size: 22vw;
             font-weight: 900;
-            color: rgba(255, 255, 255, 0.05);
+            color: rgba(0, 0, 0, 0.1);
             z-index: 1;
             user-select: none;
             white-space: nowrap;
-            pointer-events: none;
         }
 
-        /* The Image (The "Bottle") */
+        /* Feature 3: Glitching Image Container */
         .can-container {
             position: relative;
             z-index: 5;
-            width: clamp(250px, 30vw, 450px);
-            filter: drop-shadow(0 20px 50px rgba(0,0,0,0.6));
-            will-change: transform;
-            margin-right: -5%;
+            width: clamp(280px, 35vw, 500px);
+            filter: drop-shadow(0 0 30px rgba(0,0,0,0.5));
+            transition: filter 0.3s;
+        }
+
+        .can-container:hover {
+            filter: drop-shadow(0 0 50px var(--glitch-color));
         }
 
         .can-container img {
             width: 100%;
             display: block;
+            pointer-events: auto;
         }
 
-        /* Bubbles - or rather, "Tears" */
-        .bubble {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 2;
-        }
-
-        /* Content Text */
         .content {
             position: relative;
             z-index: 10;
@@ -107,33 +88,29 @@
 
         .content h1 {
             font-family: 'Montserrat', sans-serif;
-            font-size: clamp(2.5rem, 6vw, 4rem);
-            line-height: 1;
-            margin-bottom: 20px;
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            line-height: 0.9;
+            margin-bottom: 25px;
             text-transform: uppercase;
-            border-left: 8px solid var(--gold);
-            padding-left: 20px;
+            text-shadow: 5px 5px 0px rgba(0,0,0,0.2);
         }
 
-        .content .joke-math {
-            font-weight: 700;
-            color: var(--gold);
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-            display: block;
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.8rem;
         }
 
-        .content p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-            margin-bottom: 35px;
-            line-height: 1.6;
+        .stat-box {
+            background: rgba(255,255,255,0.1);
+            padding: 10px;
+            border: 1px solid rgba(255,255,255,0.2);
         }
 
-        .btn-group {
-            display: flex;
-            gap: 20px;
-        }
+        .btn-group { display: flex; gap: 20px; }
 
         .btn {
             display: inline-block;
@@ -142,122 +119,132 @@
             padding: 18px 40px;
             text-decoration: none;
             font-weight: 700;
-            border-radius: 50px;
+            border-radius: 4px;
             text-transform: uppercase;
             letter-spacing: 2px;
             transition: all 0.3s;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
         }
 
-        .btn-gold {
-            background: var(--gold);
-            color: white;
-        }
+        .btn-danger { background: var(--dark); color: white; border: 2px solid var(--white); }
 
-        .btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
-            filter: brightness(1.1);
+        /* Feature 4: Falling Tears/Rain */
+        .tear {
+            position: absolute;
+            width: 2px;
+            height: 15px;
+            background: rgba(255,255,255,0.4);
+            pointer-events: none;
+            z-index: 2;
         }
 
         @media (max-width: 1024px) {
-            .hero { flex-direction: column; justify-content: center; text-align: center; padding-top: 100px; }
-            .content h1 { border-left: none; padding-left: 0; }
-            .btn-group { justify-content: center; }
-            .can-container { width: 220px; margin-right: 0; margin-top: 40px; }
+            .hero { flex-direction: column; text-align: center; }
+            .can-container { width: 220px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="nav-link">
-        <a href="#" class="btn-outline">Pre-order Tissues</a>
+    <div class="live-counter">
+        POINTS DROPPED: <span id="pts">00</span>
     </div>
 
     <div class="hero">
-        <div class="bg-text" id="bg-move">BOTTLE</div>
+        <div class="bg-text" id="bg-move">CHOKE</div>
 
         <div class="content" id="text-anim">
-            <span class="joke-math">Treble ➔ Double ➔ Single ➔ Vibes</span>
-            <h1>Thirsty For Victory?</h1>
-            <p>We specialized in high-performance bottling since April. From 8 points clear to "maybe next year." Join our bottle cover team today—it’s free, just like the points we gave away!</p>
+            <h1>The Art of The Collapse</h1>
+            
+            <div class="stats-grid">
+                <div class="stat-box">EXPECTATION: Treble</div>
+                <div class="stat-box">REALITY: DVD Release</div>
+                <div class="stat-box">LEAD: 8 Points</div>
+                <div class="stat-box">STATUS: Bottling...</div>
+            </div>
+
+            <p>From invincibility to "it's just a hobby." We don't just lose the league; we craft a masterpiece of disappointment. $55.66 monthly to watch the dream die from the front row.</p>
+            
             <div class="btn-group">
-                <a href="#" class="btn btn-gold">Apply as Bottler</a>
-                <a href="#" class="btn">View Table (Don't)</a>
+                <a href="#" class="btn" onmouseover="glitchText(this)" onmouseout="resetText(this)">Join The Panic</a>
+                <a href="#" class="btn btn-danger">Delete History</a>
             </div>
         </div>
 
         <div class="can-container" id="can">
-            <img src="Ozil-Arsenal-PNG-Photos.png" alt="The Bottlers" id="can-img">
+            <img src="Ozil-Arsenal-PNG-Photos.png" alt="Disappointment" id="can-img">
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 
     <script>
-        window.onload = () => {
-            const img = document.querySelector('#can-img');
-            img.onerror = () => {
-                img.src = 'https://purepng.com/public/uploads/large/purepng.com-pepsi-canpepsidrinkscolasoda-1411527233291pujit.png'; 
-            };
-        };
+        // Feature 5: Glitch Effect on Hover
+        function glitchText(el) {
+            gsap.to(el, { duration: 0.1, x: "random(-5, 5)", y: "random(-5, 5)", repeat: 5, yoyo: true });
+        }
+        function resetText(el) {
+            gsap.to(el, { x: 0, y: 0, duration: 0.2 });
+        }
+
+        // Live Counter Animation
+        let count = 0;
+        setInterval(() => {
+            count += Math.floor(Math.random() * 3);
+            document.getElementById('pts').innerText = count.toString().padStart(2, '0');
+        }, 3000);
 
         const tl = gsap.timeline();
 
-        tl.from(".can-container", {
-            x: 200,
-            opacity: 0,
-            duration: 1.5,
-            ease: "expo.out"
-        })
-        .from("#text-anim .joke-math, #text-anim h1, #text-anim p, #text-anim .btn-group", {
-            y: 50,
-            opacity: 0,
-            stagger: 0.15,
-            duration: 1,
-            ease: "power3.out"
-        }, "-=1");
+        // Reveal
+        tl.from(".hero", { opacity: 0, duration: 1 })
+          .from("#text-anim > *", { y: 100, opacity: 0, stagger: 0.2, ease: "expo.out" })
+          .from("#can", { scale: 0, rotation: 180, duration: 1.5, ease: "back.out(1.7)" }, "-=1");
 
-        // The "Choke" Float - making the image wobble more
-        gsap.to("#can", {
-            y: "-=40",
-            rotation: "+=8",
-            duration: 2,
-            repeat: -1,
-            yoyo: true,
-            ease: "sine.inOut"
+        // Feature 6: Violent Shake on Mouse Over
+        const can = document.querySelector("#can");
+        can.addEventListener("mouseenter", () => {
+            gsap.to(can, { 
+                x: "random(-10, 10)", 
+                y: "random(-10, 10)", 
+                rotation: "random(-5, 5)",
+                repeat: -1, 
+                duration: 0.05, 
+                yoyo: true 
+            });
+            gsap.to("body", { backgroundColor: "#800000", duration: 0.2 });
         });
 
-        if (window.matchMedia("(pointer: fine)").matches) {
-            document.addEventListener("mousemove", (e) => {
-                const x = (window.innerWidth / 2 - e.pageX) / 50;
-                const y = (window.innerHeight / 2 - e.pageY) / 50;
+        can.addEventListener("mouseleave", () => {
+            gsap.killTweensOf(can);
+            gsap.to(can, { x: 0, y: 0, rotation: 0, duration: 0.5 });
+            gsap.to("body", { backgroundColor: "#DB0007", duration: 0.5 });
+        });
 
-                gsap.to("#bg-move", { x: x * 2, y: y * 2, duration: 1 });
-                gsap.to("#can", { rotationY: x * 5, rotationX: -y * 5, duration: 1 });
+        // Parallax
+        document.addEventListener("mousemove", (e) => {
+            const x = (e.clientX - window.innerWidth / 2) / 30;
+            const y = (e.clientY - window.innerHeight / 2) / 30;
+            gsap.to("#bg-move", { x: -x * 2, y: -y * 2, duration: 1 });
+        });
+
+        // Falling Tears
+        function createTear() {
+            const tear = document.createElement('div');
+            tear.className = 'tear';
+            tear.style.left = Math.random() * window.innerWidth + 'px';
+            tear.style.top = '-20px';
+            document.body.appendChild(tear);
+
+            gsap.to(tear, {
+                y: window.innerHeight + 100,
+                duration: Math.random() * 1 + 0.5,
+                ease: "none",
+                onComplete: () => tear.remove()
             });
         }
-
-        // Tears (Bubbles)
-        for (let i = 0; i < 25; i++) {
-            const bubble = document.createElement('div');
-            bubble.className = 'bubble';
-            const size = Math.random() * 20 + 5;
-            bubble.style.width = `${size}px`;
-            bubble.style.height = `${size}px`;
-            bubble.style.left = `${Math.random() * 100}%`;
-            bubble.style.top = `${Math.random() * 100}%`;
-            document.body.appendChild(bubble);
-
-            gsap.to(bubble, {
-                y: "+=200", // Falling tears instead of rising bubbles
-                opacity: 0,
-                duration: Math.random() * 2 + 1,
-                repeat: -1,
-                ease: "power1.in",
-                delay: Math.random() * 5
-            });
-        }
+        setInterval(createTear, 100);
     </script>
 </body>
 </html>
