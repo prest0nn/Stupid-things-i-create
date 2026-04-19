@@ -14,15 +14,22 @@
             --deep-space: #0a0a0b;
         }
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             background-color: var(--deep-space);
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
-            perspective: 1500px; /* For 3D effects */
+            overflow-x: hidden;
+            perspective: 1000px;
             font-family: 'Inter', sans-serif;
+            padding: 20px; /* Space for mobile edges */
         }
 
         /* Initial Trigger Button */
@@ -30,69 +37,55 @@
             background: none;
             border: 1px solid var(--gold-leaf);
             color: var(--gold-leaf);
-            padding: 20px 50px;
+            padding: 15px 30px;
             font-family: 'Cinzel Decorative', serif;
-            font-size: 1.1rem;
-            letter-spacing: 5px;
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
+            letter-spacing: 3px;
             cursor: pointer;
             transition: all 0.4s;
-            position: relative;
+            z-index: 100;
         }
 
-        #trigger-btn:hover {
-            background: var(--gold-leaf);
-            color: var(--deep-space);
-            box-shadow: 0 0 30px rgba(212, 175, 55, 0.4);
-        }
-
-        /* The Letter Canvas */
+        /* Responsive Letter Container */
         .letter-container {
-            width: 550px;
+            width: 100%;
+            max-width: 600px;
             background: var(--paper-white);
-            padding: 80px;
+            padding: clamp(30px, 8vw, 80px);
             position: relative;
             display: none;
             box-shadow: 0 50px 100px rgba(0,0,0,0.8);
-            border: 1px solid rgba(255,255,255,0.1);
             transform-style: preserve-3d;
-        }
-
-        /* Red "Arsenal" border that will animate */
-        .accent-bar {
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 8px;
-            background: var(--arsenal-red);
+            border-top: 8px solid var(--arsenal-red);
         }
 
         .header-section {
             text-align: center;
-            margin-bottom: 50px;
+            margin-bottom: clamp(20px, 5vw, 50px);
             border-bottom: 1px solid #e0e0e0;
-            padding-bottom: 20px;
+            padding-bottom: 15px;
         }
 
         .header-section h2 {
             font-family: 'Cinzel Decorative', serif;
-            font-size: 0.9rem;
+            font-size: clamp(0.7rem, 2vw, 0.9rem);
             color: #888;
-            letter-spacing: 3px;
+            letter-spacing: 2px;
         }
 
         .to-field {
-            font-family: 'Inter', sans-serif;
             font-weight: 600;
             text-transform: uppercase;
-            font-size: 0.75rem;
-            margin-bottom: 30px;
+            font-size: clamp(0.65rem, 1.5vw, 0.75rem);
+            margin-bottom: 20px;
             display: block;
             color: var(--arsenal-red);
         }
 
         .main-body {
             font-family: 'EB Garamond', serif;
-            font-size: 1.4rem;
-            line-height: 1.5;
+            font-size: clamp(1.1rem, 3vw, 1.4rem);
+            line-height: 1.4;
             color: #222;
         }
 
@@ -102,29 +95,30 @@
         }
 
         .signature-box {
-            margin-top: 60px;
+            margin-top: clamp(30px, 6vw, 60px);
             font-family: 'EB Garamond', serif;
             font-style: italic;
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
         }
 
         .signature-name {
             display: block;
             font-family: 'Cinzel Decorative', serif;
             font-style: normal;
-            font-size: 1.4rem;
-            margin-top: 10px;
+            font-size: clamp(1.1rem, 3vw, 1.4rem);
+            margin-top: 5px;
             color: var(--deep-space);
             border-bottom: 2px solid var(--gold-leaf);
             width: fit-content;
         }
 
-        /* Wax Seal Mockup */
+        /* Responsive Wax Seal */
         .wax-seal {
             position: absolute;
-            bottom: 40px;
-            right: 40px;
-            width: 70px;
-            height: 70px;
+            bottom: clamp(15px, 4vw, 40px);
+            right: clamp(15px, 4vw, 40px);
+            width: clamp(50px, 10vw, 75px);
+            height: clamp(50px, 10vw, 75px);
             background: #8b0000;
             border-radius: 50%;
             display: flex;
@@ -132,9 +126,15 @@
             justify-content: center;
             color: var(--gold-leaf);
             font-family: 'Cinzel Decorative';
-            font-size: 1.5rem;
-            box-shadow: inset 0 0 15px rgba(0,0,0,0.5), 2px 5px 10px rgba(0,0,0,0.3);
+            font-size: clamp(1rem, 2vw, 1.4rem);
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5), 2px 5px 10px rgba(0,0,0,0.3);
             opacity: 0;
+            z-index: 5;
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 15px; }
+            .letter-container { padding: 35px 25px; }
         }
     </style>
 </head>
@@ -143,8 +143,6 @@
     <button id="trigger-btn">SUBMIT RESIGNATION</button>
 
     <div class="letter-container" id="letter">
-        <div class="accent-bar"></div>
-        
         <div class="header-section">
             <h2>Formal Fan Resignation</h2>
         </div>
@@ -173,7 +171,6 @@
         const textTarget = document.querySelector('#text-target');
         const nameTarget = document.querySelector('#name-target');
 
-        // Professional splitting function
         function splitText(el) {
             const content = el.innerText;
             el.innerHTML = content.split("").map(c => 
@@ -185,11 +182,9 @@
         splitText(nameTarget);
 
         btn.addEventListener('click', () => {
-            // 1. Clear the screen
-            gsap.to(btn, { y: -50, opacity: 0, duration: 0.6, ease: "back.in(2)" });
+            gsap.to(btn, { scale: 0.8, opacity: 0, duration: 0.5, ease: "power2.in", onComplete: () => btn.style.display = 'none' });
 
-            // 2. Setup Letter
-            gsap.set(letter, { display: 'block', rotationX: -15, y: 100, opacity: 0 });
+            gsap.set(letter, { display: 'block', rotationX: -20, y: 50, opacity: 0 });
 
             const tl = gsap.timeline();
 
@@ -197,47 +192,34 @@
                 opacity: 1,
                 y: 0,
                 rotationX: 0,
-                duration: 1.2,
-                ease: "power4.out"
+                duration: 1,
+                ease: "power3.out"
             })
             .fromTo(".char", 
-                { 
-                    opacity: 0, 
-                    y: 50, 
-                    rotationY: 90, 
-                    filter: "blur(10px)" 
-                },
-                { 
-                    opacity: 1, 
-                    y: 0, 
-                    rotationY: 0, 
-                    filter: "blur(0px)",
-                    duration: 0.8, 
-                    stagger: 0.01,
-                    ease: "power2.out"
-                }, "-=0.4")
-            .to(".wax-seal", {
-                scale: 1.5,
-                opacity: 1,
-                duration: 0.6,
-                ease: "bounce.out"
-            })
+                { opacity: 0, y: 20, filter: "blur(8px)" },
+                { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.6, stagger: 0.012, ease: "power2.out" }, 
+                "-=0.5"
+            )
             .to(".wax-seal", {
                 scale: 1,
-                duration: 0.2
+                opacity: 1,
+                duration: 0.5,
+                ease: "bounce.out"
             });
 
-            // 3. Add 3D Mouse Tracking (The "Better" Factor)
-            document.addEventListener('mousemove', (e) => {
-                const x = (window.innerWidth / 2 - e.pageX) / 25;
-                const y = (window.innerHeight / 2 - e.pageY) / 25;
-                gsap.to(letter, {
-                    rotationY: x,
-                    rotationX: -y,
-                    duration: 0.8,
-                    ease: "power1.out"
+            // Only enable 3D tilt for devices with a mouse/pointer
+            if (window.matchMedia("(pointer: fine)").matches) {
+                document.addEventListener('mousemove', (e) => {
+                    const x = (window.innerWidth / 2 - e.pageX) / 30;
+                    const y = (window.innerHeight / 2 - e.pageY) / 30;
+                    gsap.to(letter, {
+                        rotationY: x,
+                        rotationX: -y,
+                        duration: 1,
+                        ease: "power1.out"
+                    });
                 });
-            });
+            }
         });
     </script>
 </body>
