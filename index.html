@@ -3,267 +3,187 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Final Whistle | Udeze Preston</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=EB+Garamond:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@200;700&display=swap" rel="stylesheet">
+    <title>The Departure | Udeze Preston</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=EB+Garamond:ital,wght@0,400;0,700;1,400&family=Inter:wght@200;400;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --arsenal-red: #cc0000;
-            --gold: #c5a059;
-            --paper: #fdfaf3;
-            --ink: #1a1a1a;
+            --arsenal-red: #ff3e3e;
+            --gold: #d4af37;
+            --glass: rgba(255, 255, 255, 0.95);
+            --bg: #080808;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            background-color: #050505;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            background-color: var(--bg);
+            background-image: 
+                radial-gradient(circle at 20% 30%, #1a0505 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, #050a1a 0%, transparent 40%);
+            height: 100vh;
+            width: 100vw;
+            display: grid;
+            place-items: center; /* Modern centering */
             overflow: hidden;
-            perspective: 2000px;
-            font-family: 'Montserrat', sans-serif;
-            color: white;
+            perspective: 1200px;
+            font-family: 'Inter', sans-serif;
         }
 
-        /* Ambient Background Glow */
-        .bg-glow {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at center, #1a0000 0%, #050505 70%);
-            z-index: -1;
-        }
-
-        /* Cinematic Trigger */
-        #launch-sequence {
-            position: relative;
-            background: none;
-            border: 1px solid var(--arsenal-red);
-            padding: 25px 50px;
+        /* Modern Centered Trigger */
+        #launch-btn {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             color: white;
+            padding: 20px 40px;
             font-family: 'Cinzel Decorative', serif;
-            font-size: 1.2rem;
-            letter-spacing: 6px;
+            letter-spacing: 4px;
             cursor: pointer;
-            overflow: hidden;
-            transition: 0.3s;
+            border-radius: 4px;
+            transition: 0.5s;
+            z-index: 10;
         }
 
-        #launch-sequence:hover {
-            box-shadow: 0 0 40px rgba(204, 0, 0, 0.6);
+        #launch-btn:hover {
             background: var(--arsenal-red);
+            box-shadow: 0 0 50px rgba(255, 62, 62, 0.4);
+            border-color: var(--arsenal-red);
         }
 
-        /* The Letter - High Quality Texture */
-        .letter-frame {
-            width: 95%;
-            max-width: 650px;
-            background: var(--paper);
-            background-image: url('https://www.transparenttextures.com/patterns/cream-paper.png');
-            padding: clamp(40px, 8vw, 100px);
+        /* The Modern Letter Box */
+        .letter-card {
             display: none;
+            width: 90%;
+            max-width: 580px;
+            background: var(--glass);
+            padding: clamp(40px, 10vw, 80px);
+            border-radius: 2px;
+            box-shadow: 
+                0 40px 100px rgba(0,0,0,0.8),
+                inset 0 0 0 1px rgba(255,255,255,0.5);
             position: relative;
-            box-shadow: 0 100px 150px -50px rgba(0,0,0,1);
             transform-style: preserve-3d;
-            color: var(--ink);
-            border: 1px solid #ddd;
+            color: #111;
         }
 
-        .letter-frame::before {
-            content: '';
+        .red-line {
             position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            border: 20px solid transparent;
-            border-image: source linear-gradient(45deg, var(--gold), transparent, var(--gold));
-            border-image-slice: 1;
-            opacity: 0.3;
-            pointer-events: none;
+            top: 0; left: 0; width: 100%; height: 6px;
+            background: linear-gradient(90deg, var(--arsenal-red), #800000);
         }
 
-        .stamp-top {
-            text-align: center;
-            font-family: 'Cinzel Decorative', serif;
-            font-size: 0.8rem;
-            letter-spacing: 5px;
-            color: var(--arsenal-red);
-            margin-bottom: 40px;
-            text-transform: uppercase;
-        }
-
-        .address-line {
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 700;
+        .meta-info {
             font-size: 0.7rem;
-            letter-spacing: 1px;
-            margin-bottom: 30px;
-            opacity: 0.7;
-        }
-
-        .main-text {
-            font-family: 'EB Garamond', serif;
-            font-size: clamp(1.2rem, 4vw, 1.6rem);
-            line-height: 1.6;
+            text-transform: uppercase;
+            letter-spacing: 2px;
             margin-bottom: 40px;
-            text-align: justify;
+            color: #666;
+            font-weight: 700;
+            border-left: 2px solid var(--arsenal-red);
+            padding-left: 15px;
         }
 
-        .char { display: inline-block; will-change: transform, opacity, filter; }
-
-        .signature-section {
-            margin-top: 50px;
+        .message-content {
             font-family: 'EB Garamond', serif;
-            font-style: italic;
-            font-size: 1.3rem;
+            font-size: clamp(1.2rem, 3.5vw, 1.5rem);
+            line-height: 1.5;
+            margin-bottom: 40px;
+            font-weight: 400;
         }
 
-        .preston-sig {
+        .char { display: inline-block; will-change: transform, opacity; }
+
+        .sig-wrap {
+            margin-top: 60px;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+
+        .name-style {
             display: block;
             font-family: 'Cinzel Decorative', serif;
-            font-style: normal;
-            font-size: 1.8rem;
-            margin-top: 15px;
-            background: linear-gradient(90deg, var(--ink), var(--gold));
+            font-size: 1.6rem;
+            background: linear-gradient(45deg, #111, var(--arsenal-red));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            width: fit-content;
+            margin-top: 10px;
         }
 
-        /* The Wax Seal - 3D Look */
-        .official-seal {
+        /* Subtle Paper Grain Overlay */
+        .letter-card::after {
+            content: '';
             position: absolute;
-            bottom: 50px;
-            right: 50px;
-            width: 80px;
-            height: 80px;
-            background: radial-gradient(circle at 30% 30%, #a30000, #5a0000);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--gold);
-            font-weight: bold;
-            box-shadow: 4px 10px 20px rgba(0,0,0,0.4);
-            transform: scale(0);
-        }
-
-        /* Screen Overlay for the "Pop" */
-        .flash {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: white;
-            opacity: 0;
+            inset: 0;
+            background-image: url('https://www.transparenttextures.com/patterns/handmade-paper.png');
+            opacity: 0.15;
             pointer-events: none;
-            z-index: 200;
         }
     </style>
 </head>
 <body>
 
-    <div class="bg-glow"></div>
-    <div class="flash"></div>
+    <button id="launch-btn">EXECUTE DEPARTURE</button>
 
-    <button id="launch-sequence">TERMINATE CONTRACT</button>
-
-    <article class="letter-frame" id="letter">
-        <div class="stamp-top">Official fan severance notice</div>
+    <div class="letter-card" id="letter">
+        <div class="red-line"></div>
         
-        <div class="address-line">
-            TO: MIKEL ARTETA AMATRIAIN<br>
-            EMIRATES STADIUM, LONDON
+        <div class="meta-info">
+            Ref: Fanbase Termination<br>
+            To: Mikel Arteta | Arsenal FC
         </div>
 
-        <div class="main-text" id="body-text">
-            Mikel, please be advised that effective immediately, my allegiance to Arsenal Football Club is permanently dissolved. The process has been exhausted, and my patience has reached its conclusion. I am officially a free agent.
+        <div class="message-content" id="msg">
+            The process has been exhausted. I, Udeze Preston, am officially terminating my allegiance to Arsenal. The final whistle has blown.
         </div>
 
-        <div class="signature-section">
-            Regards,<br>
-            <span class="preston-sig" id="sig-name">Udeze Preston</span>
+        <div class="sig-wrap">
+            <span style="font-size: 0.9rem; font-style: italic;">Signed,</span>
+            <span class="name-style" id="name">Udeze Preston</span>
         </div>
-
-        <div class="official-seal">UP</div>
-    </article>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 
     <script>
-        const launchBtn = document.querySelector('#launch-sequence');
+        const btn = document.querySelector('#launch-btn');
         const letter = document.querySelector('#letter');
-        const bodyText = document.querySelector('#body-text');
-        const sigName = document.querySelector('#sig-name');
+        const msg = document.querySelector('#msg');
+        const name = document.querySelector('#name');
 
-        // Advanced Splitter (Preserves Words for better layout)
-        function splitToChars(el) {
-            const text = el.innerText;
-            el.innerHTML = text.split("").map(c => 
+        function prep(el) {
+            el.innerHTML = el.innerText.split("").map(c => 
                 `<span class="char">${c === " " ? "&nbsp;" : c}</span>`
             ).join("");
         }
 
-        splitToChars(bodyText);
-        splitToChars(sigName);
+        prep(msg);
+        prep(name);
 
-        launchBtn.addEventListener('click', () => {
+        btn.addEventListener('click', () => {
+            gsap.to(btn, { y: 20, opacity: 0, duration: 0.4, ease: "power2.in" });
+
             const tl = gsap.timeline();
 
-            // 1. Sudden Flash & Button Exit
-            tl.to(".flash", { opacity: 0.8, duration: 0.1, yoyo: true, repeat: 1 })
-              .to(launchBtn, { scale: 1.5, opacity: 0, duration: 0.4, ease: "power4.in" }, 0)
-              
-            // 2. Letter Enters with Heavy 3D Swing
-            .set(letter, { display: 'block', rotationX: 45, y: 300, opacity: 0, scale: 0.8 })
-            .to(letter, {
-                opacity: 1,
-                y: 0,
-                rotationX: 0,
-                scale: 1,
-                duration: 1.5,
-                ease: "expo.out"
-            })
+            tl.set(letter, { display: 'block', scale: 0.9, opacity: 0, rotationX: -10 })
+              .to(letter, {
+                  opacity: 1,
+                  scale: 1,
+                  rotationX: 0,
+                  duration: 1,
+                  ease: "expo.out"
+              })
+              .fromTo(".char", 
+                { opacity: 0, y: 30, rotationX: 90 },
+                { opacity: 1, y: 0, rotationX: 0, duration: 0.8, stagger: 0.015, ease: "power3.out" },
+                "-=0.5"
+              );
 
-            // 3. Ink "Bleeding" Animation for characters
-            .fromTo(".char", 
-                { 
-                    opacity: 0, 
-                    scale: 0.5,
-                    filter: "blur(15px) brightness(2)",
-                    y: (i) => i % 2 === 0 ? -20 : 20
-                },
-                { 
-                    opacity: 1, 
-                    scale: 1,
-                    filter: "blur(0px) brightness(1)",
-                    y: 0,
-                    duration: 1, 
-                    stagger: { amount: 1.5, from: "start" },
-                    ease: "power3.out"
-                }, "-=0.5")
-
-            // 4. The Seal Slam
-            .to(".official-seal", {
-                scale: 1,
-                duration: 0.4,
-                ease: "back.out(2)"
-            })
-            .to(".bg-glow", {
-                background: "radial-gradient(circle at center, #330000 0%, #050505 80%)",
-                duration: 2
-            }, "-=1");
-
-            // 5. Sophisticated 3D Parallax
-            window.addEventListener('mousemove', (e) => {
-                const xVal = (window.innerWidth / 2 - e.pageX) / 40;
-                const yVal = (window.innerHeight / 2 - e.pageY) / 40;
-                
-                gsap.to(letter, {
-                    rotationY: xVal,
-                    rotationX: -yVal,
-                    duration: 1.2,
-                    ease: "power2.out"
-                });
+            // High-End Tilt Logic
+            document.addEventListener('mousemove', (e) => {
+                const x = (window.innerWidth / 2 - e.clientX) / 40;
+                const y = (window.innerHeight / 2 - e.clientY) / 40;
+                gsap.to(letter, { rotationY: x, rotationX: -y, duration: 1 });
             });
         });
     </script>
